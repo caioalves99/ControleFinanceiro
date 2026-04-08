@@ -14,6 +14,8 @@ const DashboardPage: React.FC = () => {
   const [type, setType] = useState<'entrada' | 'saida'>('saida');
   const [month, setMonth] = useState(new Date().toISOString().substring(0, 7));
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   useEffect(() => {
     const unsubscribeAuth = authService.subscribeToAuthChanges((u) => {
       setUser(u);
@@ -32,19 +34,32 @@ const DashboardPage: React.FC = () => {
 
   const handleAddTransaction = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user || !description || !value) return;
+    if (!user || !description || !value || isSubmitting) return;
 
-    await firestoreService.addTransaction(user.uid, {
-      description,
-      value: parseFloat(value),
-      type,
-      date: new Date(),
-      month,
-      icon: type === 'entrada' ? '💰' : '💸'
-    });
+    setIsSubmitting(true);
+    try {
+      const numericValue = parseFloat(value.replace(',', '.'));
+      if (isNaN(numericValue)) {
+        throw new Error('Valor inválido');
+      }
 
-    setDescription('');
-    setValue('');
+      await firestoreService.addTransaction(user.uid, {
+        description,
+        value: numericValue,
+        type,
+        date: new Date(),
+        month,
+        icon: type === 'entrada' ? '💰' : '💸'
+      });
+
+      setDescription('');
+      setValue('');
+    } catch (err: any) {
+      console.error("Erro ao adicionar transação:", err);
+      alert("Erro ao adicionar transação: " + (err.message || "Verifique sua conexão ou permissões do Firebase."));
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleDelete = async (id: string) => {
@@ -90,8 +105,8 @@ const DashboardPage: React.FC = () => {
             <option value="entrada">Entrada</option>
             <option value="saida">Saída</option>
           </select>
-          <button className="btn btn-primary" type="submit" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <Plus size={20} /> Adicionar
+          <button className="btn btn-primary" type="submit" disabled={isSubmitting} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', opacity: isSubmitting ? 0.7 : 1 }}>
+            <Plus size={20} /> {isSubmitting ? 'Adicionando...' : 'Adicionar'}
           </button>
         </form>
       </div>

@@ -25,7 +25,7 @@ const App: React.FC = () => {
   }
 
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/controlefinanceiro">
       <Routes>
         <Route path="/login" element={!user ? <LoginPage /> : <Navigate to="/" />} />
         <Route path="/" element={user ? <DashboardPage /> : <Navigate to="/login" />} />
