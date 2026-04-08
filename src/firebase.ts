@@ -8,8 +8,8 @@ const firebaseConfig = {
   projectId: "controlefinanceiro-c238a",
   storageBucket: "controlefinanceiro-c238a.firebasestorage.app",
   messagingSenderId: "900505056984",
-  appId: "1:900505056984:web:173099c4439fc4523589ad",
-  measurementId: "G-W7Z1DJR2CX"
+  appId: "1:900505056984:web:87bbd72981f337be3589ad",
+  measurementId: "G-7B264262WR"
 };
 
 const app = initializeApp(firebaseConfig);
