@@ -1,6 +1,4 @@
 import { 
-  signInWithEmailAndPassword, 
-  createUserWithEmailAndPassword, 
   signOut as firebaseSignOut,
   onAuthStateChanged,
   signInWithPopup,
@@ -13,16 +11,8 @@ export const authService = {
     return onAuthStateChanged(auth, callback);
   },
 
-  signIn: (email: string, password: string) => {
-    return signInWithEmailAndPassword(auth, email, password);
-  },
-
   signInWithGoogle: () => {
     return signInWithPopup(auth, googleProvider);
-  },
-
-  register: (email: string, password: string) => {
-    return createUserWithEmailAndPassword(auth, email, password);
   },
 
   signOut: () => {
