@@ -24,6 +24,16 @@ const LoginPage: React.FC = () => {
     }
   };
 
+  const handleGoogleLogin = async () => {
+    setError('');
+    try {
+      await authService.signInWithGoogle();
+      navigate('/');
+    } catch (err: any) {
+      setError(err.message || 'Ocorreu um erro ao entrar com Google');
+    }
+  };
+
   return (
     <div className="container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
       <div className="card" style={{ width: '100%', maxWidth: '400px' }}>
@@ -52,6 +62,31 @@ const LoginPage: React.FC = () => {
             {isRegistering ? 'Cadastrar' : 'Entrar'}
           </button>
         </form>
+        
+        <div style={{ margin: '1rem 0', textAlign: 'center', position: 'relative' }}>
+          <hr style={{ border: '0', borderTop: '1px solid #ddd' }} />
+          <span style={{ position: 'absolute', top: '-10px', left: '50%', transform: 'translateX(-50%)', background: '#fff', padding: '0 10px', color: '#888', fontSize: '0.9rem' }}>ou</span>
+        </div>
+
+        <button 
+          className="btn" 
+          onClick={handleGoogleLogin}
+          style={{ 
+            width: '100%', 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center', 
+            gap: '10px',
+            backgroundColor: '#fff',
+            color: '#757575',
+            border: '1px solid #ddd',
+            marginBottom: '1rem'
+          }}
+        >
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" style={{ width: '18px' }} />
+          Entrar com Google
+        </button>
+
         <p style={{ textAlign: 'center', marginTop: '1rem', cursor: 'pointer', color: 'var(--primary-color)' }} onClick={() => setIsRegistering(!isRegistering)}>
           {isRegistering ? 'Já tem uma conta? Entre' : 'Não tem conta? Cadastre-se'}
         </p>
