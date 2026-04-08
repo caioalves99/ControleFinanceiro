@@ -7,12 +7,15 @@ interface SummaryCardProps {
 }
 
 const SummaryCard: React.FC<SummaryCardProps> = ({ title, value, type }) => {
-  const color = type === 'entrada' ? 'var(--secondary-color)' : type === 'saida' ? 'var(--danger-color)' : 'var(--primary-color)';
+  const gradientClass = 
+    type === 'entrada' ? 'card-gradient-success' : 
+    type === 'saida' ? 'card-gradient-danger' : 
+    'card-gradient-primary';
   
   return (
-    <div className="card" style={{ flex: 1, minWidth: '200px' }}>
-      <h3 style={{ margin: 0, fontSize: '0.875rem', color: 'var(--text-muted)' }}>{title}</h3>
-      <p style={{ margin: '0.5rem 0 0 0', fontSize: '1.5rem', fontWeight: 'bold', color }}>
+    <div className={`card ${gradientClass}`} style={{ flex: 1, minWidth: '200px' }}>
+      <h3 style={{ margin: 0, fontSize: '0.875rem', opacity: 0.9 }}>{title}</h3>
+      <p style={{ margin: '0.5rem 0 0 0', fontSize: '1.75rem', fontWeight: '800' }}>
         R$ {value.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
       </p>
     </div>

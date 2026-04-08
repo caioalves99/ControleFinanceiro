@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { authService } from './services/auth';
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
@@ -25,12 +25,12 @@ const App: React.FC = () => {
   }
 
   return (
-    <BrowserRouter basename="/controlefinanceiro">
+    <HashRouter>
       <Routes>
         <Route path="/login" element={!user ? <LoginPage /> : <Navigate to="/" />} />
         <Route path="/" element={user ? <DashboardPage /> : <Navigate to="/login" />} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 };
 

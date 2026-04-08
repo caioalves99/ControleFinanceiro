@@ -4,7 +4,7 @@ import { firestoreService } from '../services/firestore';
 import { FinanceTransaction } from '../models/transaction';
 import SummaryCard from '../components/SummaryCard';
 import BarChartWidget from '../components/BarChart';
-import { LogOut, Plus, Trash2 } from 'lucide-react';
+import { LogOut, Plus, Trash2, Calendar, Filter } from 'lucide-react';
 
 const DashboardPage: React.FC = () => {
   const [user, setUser] = useState<any>(null);
@@ -13,7 +13,6 @@ const DashboardPage: React.FC = () => {
   const [value, setValue] = useState('');
   const [type, setType] = useState<'entrada' | 'saida'>('saida');
   const [month, setMonth] = useState(new Date().toISOString().substring(0, 7));
-
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
@@ -39,9 +38,7 @@ const DashboardPage: React.FC = () => {
     setIsSubmitting(true);
     try {
       const numericValue = parseFloat(value.replace(',', '.'));
-      if (isNaN(numericValue)) {
-        throw new Error('Valor inválido');
-      }
+      if (isNaN(numericValue)) throw new Error('Valor inválido');
 
       await firestoreService.addTransaction(user.uid, {
         description,
@@ -55,15 +52,14 @@ const DashboardPage: React.FC = () => {
       setDescription('');
       setValue('');
     } catch (err: any) {
-      console.error("Erro ao adicionar transação:", err);
-      alert("Erro ao adicionar transação: " + (err.message || "Verifique sua conexão ou permissões do Firebase."));
+      alert("Erro ao adicionar: " + (err.message || "Erro desconhecido"));
     } finally {
       setIsSubmitting(false);
     }
   };
 
   const handleDelete = async (id: string) => {
-    if (user && id) {
+    if (user && id && window.confirm('Excluir esta transação?')) {
       await firestoreService.deleteTransaction(user.uid, id);
     }
   };
@@ -74,70 +70,90 @@ const DashboardPage: React.FC = () => {
     return acc;
   }, { entrada: 0, saida: 0 });
 
-  const chartData = [
-    { name: 'Entradas', valor: totals.entrada },
-    { name: 'Saídas', valor: totals.saida },
-  ];
-
   return (
-    <div className="container" style={{ paddingBottom: '5rem' }}>
-      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-        <h1 style={{ fontSize: '1.5rem', margin: 0 }}>Meus Gastos</h1>
-        <button className="btn" onClick={() => authService.signOut()} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--danger-color)' }}>
-          <LogOut size={20} /> Sair
+    <div className="container">
+      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3rem' }}>
+        <div>
+          <h1 style={{ margin: 0, fontSize: '1.75rem', background: 'var(--grad-primary)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+            FinTrack
+          </h1>
+          <p style={{ margin: 0, color: 'var(--text-muted)', fontSize: '0.9rem' }}>Controle suas finanças com estilo</p>
+        </div>
+        <button className="btn btn-ghost" onClick={() => authService.signOut()}>
+          <LogOut size={18} /> Sair
         </button>
       </header>
 
-      <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
+      <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '3rem' }}>
         <SummaryCard title="Entradas" value={totals.entrada} type="entrada" />
         <SummaryCard title="Saídas" value={totals.saida} type="saida" />
-        <SummaryCard title="Balanço" value={totals.entrada - totals.saida} type="total" />
+        <SummaryCard title="Balanço Total" value={totals.entrada - totals.saida} type="total" />
       </div>
 
-      <BarChartWidget data={chartData} />
-
-      <div className="card" style={{ marginTop: '2rem' }}>
-        <h3 style={{ marginBottom: '1rem' }}>Nova Transação</h3>
-        <form onSubmit={handleAddTransaction} style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-          <input className="input" style={{ flex: 2, marginBottom: 0 }} placeholder="Descrição" value={description} onChange={e => setDescription(e.target.value)} required />
-          <input className="input" style={{ flex: 1, marginBottom: 0 }} type="number" step="0.01" placeholder="Valor" value={value} onChange={e => setValue(e.target.value)} required />
-          <select className="input" style={{ flex: 1, marginBottom: 0 }} value={type} onChange={e => setType(e.target.value as any)}>
-            <option value="entrada">Entrada</option>
-            <option value="saida">Saída</option>
-          </select>
-          <button className="btn btn-primary" type="submit" disabled={isSubmitting} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', opacity: isSubmitting ? 0.7 : 1 }}>
-            <Plus size={20} /> {isSubmitting ? 'Adicionando...' : 'Adicionar'}
-          </button>
-        </form>
-      </div>
-
-      <div style={{ marginTop: '2rem' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-          <h3>Transações</h3>
-          <input type="month" className="input" style={{ width: 'auto', marginBottom: 0 }} value={month} onChange={e => setMonth(e.target.value)} />
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '2rem', alignItems: 'start' }}>
+        <div className="card">
+          <h3 style={{ marginTop: 0, marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <Plus size={20} color="var(--primary-color)" /> Nova Transação
+          </h3>
+          <form onSubmit={handleAddTransaction} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <input className="input" placeholder="O que você comprou ou recebeu?" value={description} onChange={e => setDescription(e.target.value)} required />
+            <div style={{ display: 'flex', gap: '1rem' }}>
+              <input className="input" type="number" step="0.01" placeholder="R$ 0,00" value={value} onChange={e => setValue(e.target.value)} required style={{ flex: 2 }} />
+              <select className="input" style={{ flex: 1 }} value={type} onChange={e => setType(e.target.value as any)}>
+                <option value="saida">Saída</option>
+                <option value="entrada">Entrada</option>
+              </select>
+            </div>
+            <button className="btn btn-primary" type="submit" disabled={isSubmitting} style={{ width: '100%' }}>
+              {isSubmitting ? 'Processando...' : 'Adicionar Transação'}
+            </button>
+          </form>
+          
+          <div className="divider"></div>
+          <BarChartWidget data={[
+            { name: 'Entradas', valor: totals.entrada },
+            { name: 'Saídas', valor: totals.saida },
+          ]} />
         </div>
-        
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-          {transactions.map(t => (
-            <div key={t.id} className="card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                <span style={{ fontSize: '1.5rem' }}>{t.icon}</span>
-                <div>
-                  <p style={{ margin: 0, fontWeight: 600 }}>{t.description}</p>
-                  <p style={{ margin: 0, fontSize: '0.75rem', color: 'var(--text-muted)' }}>{t.date.toLocaleDateString()}</p>
+
+        <div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+            <h3 style={{ margin: 0 }}>Histórico</h3>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'var(--card-bg)', padding: '0.5rem', borderRadius: '0.75rem', border: '1px solid var(--border-color)' }}>
+              <Calendar size={16} color="var(--text-muted)" />
+              <input type="month" className="input" style={{ border: 'none', padding: 0, width: '120px', fontSize: '0.9rem', marginBottom: 0 }} value={month} onChange={e => setMonth(e.target.value)} />
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+            {transactions.map(t => (
+              <div key={t.id} className="transaction-item">
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                  <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'var(--f8fafc)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.25rem', border: '1px solid var(--border-color)' }}>
+                    {t.icon}
+                  </div>
+                  <div>
+                    <p style={{ margin: 0, fontWeight: 700 }}>{t.description}</p>
+                    <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--text-muted)' }}>{t.date.toLocaleDateString('pt-BR')}</p>
+                  </div>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+                  <p style={{ margin: 0, fontWeight: 800, fontSize: '1.1rem', color: t.type === 'entrada' ? 'var(--secondary-color)' : 'var(--danger-color)' }}>
+                    {t.type === 'entrada' ? '+' : '-'} R$ {t.value.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                  </p>
+                  <button className="btn-ghost" onClick={() => t.id && handleDelete(t.id)} style={{ padding: '0.5rem', borderRadius: '0.5rem' }}>
+                    <Trash2 size={18} color="var(--danger-color)" />
+                  </button>
                 </div>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                <p style={{ margin: 0, fontWeight: 'bold', color: t.type === 'entrada' ? 'var(--secondary-color)' : 'var(--danger-color)' }}>
-                  {t.type === 'entrada' ? '+' : '-'} R$ {t.value.toLocaleString('pt-BR')}
-                </p>
-                <button onClick={() => t.id && handleDelete(t.id)} style={{ background: 'none', border: 'none', color: 'var(--danger-color)', cursor: 'pointer' }}>
-                  <Trash2 size={18} />
-                </button>
+            ))}
+            {transactions.length === 0 && (
+              <div className="card" style={{ textAlign: 'center', padding: '3rem', borderStyle: 'dashed' }}>
+                <Filter size={40} color="var(--border-color)" style={{ marginBottom: '1rem' }} />
+                <p style={{ color: 'var(--text-muted)', margin: 0 }}>Nenhuma transação este mês.</p>
               </div>
-            </div>
-          ))}
-          {transactions.length === 0 && <p style={{ textAlign: 'center', color: 'var(--text-muted)', marginTop: '2rem' }}>Nenhuma transação encontrada.</p>}
+            )}
+          </div>
         </div>
       </div>
     </div>

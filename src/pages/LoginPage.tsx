@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { authService } from '../services/auth';
 import { useNavigate } from 'react-router-dom';
+import { Mail, Lock, LogIn, UserPlus } from 'lucide-react';
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -35,37 +36,65 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-      <div className="card" style={{ width: '100%', maxWidth: '400px' }}>
-        <h2 style={{ textAlign: 'center', marginBottom: '2rem' }}>
-          {isRegistering ? 'Criar Conta' : 'Entrar no Controle'}
-        </h2>
-        <form onSubmit={handleSubmit}>
-          <input
-            className="input"
-            type="email"
-            placeholder="E-mail"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <input
-            className="input"
-            type="password"
-            placeholder="Senha"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          {error && <p style={{ color: 'var(--danger-color)', marginBottom: '1rem' }}>{error}</p>}
-          <button className="btn btn-primary" type="submit" style={{ width: '100%' }}>
-            {isRegistering ? 'Cadastrar' : 'Entrar'}
+    <div style={{ 
+      minHeight: '100vh', 
+      display: 'flex', 
+      alignItems: 'center', 
+      justifyContent: 'center', 
+      background: 'var(--grad-primary)',
+      padding: '1rem'
+    }}>
+      <div className="card" style={{ width: '100%', maxWidth: '420px', padding: '2.5rem' }}>
+        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+          <h1 style={{ margin: 0, fontSize: '2rem', color: 'var(--primary-color)' }}>FinTrack</h1>
+          <p style={{ color: 'var(--text-muted)', marginTop: '0.5rem' }}>
+            {isRegistering ? 'Crie sua conta agora' : 'Bem-vindo de volta!'}
+          </p>
+        </div>
+
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+          <div style={{ position: 'relative' }}>
+            <Mail size={18} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+            <input
+              className="input"
+              type="email"
+              placeholder="Seu e-mail"
+              style={{ paddingLeft: '40px', marginBottom: 0 }}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+
+          <div style={{ position: 'relative' }}>
+            <Lock size={18} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+            <input
+              className="input"
+              type="password"
+              placeholder="Sua senha"
+              style={{ paddingLeft: '40px', marginBottom: 0 }}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+
+          {error && (
+            <div style={{ padding: '0.75rem', borderRadius: '0.5rem', background: '#fef2f2', color: 'var(--danger-color)', fontSize: '0.85rem', textAlign: 'center' }}>
+              {error}
+            </div>
+          )}
+
+          <button className="btn btn-primary" type="submit" style={{ width: '100%', height: '50px' }}>
+            {isRegistering ? <><UserPlus size={20} /> Criar Conta</> : <><LogIn size={20} /> Entrar</>}
           </button>
         </form>
-        
-        <div style={{ margin: '1rem 0', textAlign: 'center', position: 'relative' }}>
-          <hr style={{ border: '0', borderTop: '1px solid #ddd' }} />
-          <span style={{ position: 'absolute', top: '-10px', left: '50%', transform: 'translateX(-50%)', background: '#fff', padding: '0 10px', color: '#888', fontSize: '0.9rem' }}>ou</span>
+
+        <div style={{ margin: '1.5rem 0', textAlign: 'center', position: 'relative' }}>
+          <div className="divider" style={{ margin: 0 }}></div>
+          <span style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', background: 'var(--card-bg)', padding: '0 10px', color: 'var(--text-muted)', fontSize: '0.8rem' }}>
+            OU
+          </span>
         </div>
 
         <button 
@@ -73,22 +102,21 @@ const LoginPage: React.FC = () => {
           onClick={handleGoogleLogin}
           style={{ 
             width: '100%', 
-            display: 'flex', 
-            alignItems: 'center', 
-            justifyContent: 'center', 
-            gap: '10px',
-            backgroundColor: '#fff',
-            color: '#757575',
+            background: 'white', 
+            color: '#444', 
             border: '1px solid #ddd',
-            marginBottom: '1rem'
+            height: '50px'
           }}
         >
-          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" style={{ width: '18px' }} />
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" style={{ width: '20px' }} />
           Entrar com Google
         </button>
 
-        <p style={{ textAlign: 'center', marginTop: '1rem', cursor: 'pointer', color: 'var(--primary-color)' }} onClick={() => setIsRegistering(!isRegistering)}>
-          {isRegistering ? 'Já tem uma conta? Entre' : 'Não tem conta? Cadastre-se'}
+        <p 
+          style={{ textAlign: 'center', marginTop: '1.5rem', cursor: 'pointer', color: 'var(--primary-color)', fontWeight: 600, fontSize: '0.9rem' }} 
+          onClick={() => setIsRegistering(!isRegistering)}
+        >
+          {isRegistering ? 'Já tem uma conta? Faça login' : 'Não tem uma conta? Cadastre-se'}
         </p>
       </div>
     </div>

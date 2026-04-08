@@ -1,86 +1,156 @@
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #f0f2f5;
+  color: #1f2937;
+  background-color: #f8fafc;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  --primary-color: #2563eb;
+  /* Modern Gradient Palette */
+  --grad-primary: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+  --grad-success: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+  --grad-danger: linear-gradient(135deg, #f43f5e 0%, #fb923c 100%);
+  --grad-surface: linear-gradient(135deg, #ffffff 0%, #f3f4f6 100%);
+
+  --primary-color: #6366f1;
   --secondary-color: #10b981;
-  --danger-color: #ef4444;
+  --danger-color: #f43f5e;
   --text-main: #1f2937;
   --text-muted: #6b7280;
   --card-bg: #ffffff;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-  color: var(--text-main);
-}
-
-#root {
-  width: 100%;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem;
-}
-
-.card {
-  background: var(--card-bg);
-  border-radius: 1rem;
-  padding: 1.5rem;
-  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-}
-
-.btn {
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  border: none;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.btn-primary {
-  background: var(--primary-color);
-  color: white;
-}
-
-.btn-primary:hover {
-  background: #1d4ed8;
-}
-
-.input {
-  width: 100%;
-  padding: 0.75rem;
-  border-radius: 0.5rem;
-  border: 1px solid #d1d5db;
-  margin-bottom: 1rem;
+  --border-color: #e5e7eb;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    background-color: #111827;
-    --text-main: #f3f4f6;
-    --text-muted: #9ca3af;
-    --card-bg: #1f2937;
+    background-color: #0f172a;
+    color: #f8fafc;
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --card-bg: #1e293b;
+    --border-color: #334155;
+    --grad-surface: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
   }
+}
+
+body {
+  margin: 0;
+  display: block;
+  min-height: 100vh;
+  background: fixed;
+}
+
+* {
+  box-sizing: border-box;
+  transition: background-color 0.3s, border-color 0.3s, transform 0.2s;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.card {
+  background: var(--card-bg);
+  border-radius: 1.25rem;
+  padding: 1.5rem;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+}
+
+.card-gradient-primary { background: var(--grad-primary); color: white; border: none; }
+.card-gradient-success { background: var(--grad-success); color: white; border: none; }
+.card-gradient-danger { background: var(--grad-danger); color: white; border: none; }
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary {
+  background: var(--grad-primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.4);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-muted);
+  box-shadow: none;
+}
+
+.btn-ghost:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--text-main);
+}
+
+.input {
+  width: 100%;
+  padding: 0.875rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  color: var(--text-main);
+  font-size: 1rem;
+  outline: none;
+}
+
+.input:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+.transaction-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem;
+  border-radius: 1rem;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  margin-bottom: 0.75rem;
+}
+
+.transaction-item:hover {
+  transform: scale(1.01);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 2rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+h1, h2, h3 {
+  font-weight: 800;
+  letter-spacing: -0.025em;
+}
+
+.divider {
+  height: 1px;
+  background: var(--border-color);
+  margin: 1.5rem 0;
 }
