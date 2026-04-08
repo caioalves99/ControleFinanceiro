@@ -1,4 +1,4 @@
-name: Deploy Flutter Web
+name: Deploy React Web
 
 on:
   push:
@@ -10,14 +10,20 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       
-      - uses: subosito/flutter-action@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          channel: 'stable'
+          node-version: '20'
+          cache: 'npm'
           
-      - run: flutter build web --release
+      - name: Install dependencies
+        run: npm install
+        
+      - name: Build project
+        run: npm run build
       
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build/web
+          publish_dir: ./dist
