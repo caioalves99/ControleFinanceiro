@@ -16,7 +16,15 @@ const LoginPage: React.FC = () => {
       navigate('/');
     } catch (err: any) {
       console.error(err);
-      setError('Ocorreu um erro ao entrar com Google. Verifique sua conexão.');
+      if (err.code === 'auth/popup-blocked') {
+        setError('O pop-up de login foi bloqueado pelo seu navegador. Por favor, permita pop-ups.');
+      } else if (err.code === 'auth/unauthorized-domain') {
+        setError('Este domínio não está autorizado no Firebase Console (caioalves99.github.io).');
+      } else if (err.code === 'auth/operation-not-allowed') {
+        setError('O login com Google não foi ativado no Firebase Console.');
+      } else {
+        setError('Erro ao entrar: ' + (err.message || 'Verifique sua conexão.'));
+      }
     } finally {
       setIsLoading(false);
     }
@@ -28,7 +36,7 @@ const LoginPage: React.FC = () => {
       display: 'flex', 
       alignItems: 'center', 
       justifyContent: 'center', 
-      background: 'var(--grad-primary)',
+      background: '#060b18',
       padding: '1rem'
     }}>
       <div className="card" style={{ width: '100%', maxWidth: '400px', padding: '3rem', textAlign: 'center' }}>

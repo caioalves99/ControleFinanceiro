@@ -129,7 +129,7 @@ const DashboardPage: React.FC = () => {
             {transactions.map(t => (
               <div key={t.id} className="transaction-item">
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                  <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'var(--f8fafc)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.25rem', border: '1px solid var(--border-color)' }}>
+                  <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'var(--input-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.25rem', border: '1px solid var(--border-color)' }}>
                     {t.icon}
                   </div>
                   <div>
