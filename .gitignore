@@ -30,3 +30,6 @@ dist-ssr
 .pub-cache/
 .pub/
 build/
+
+# Arquivos locais ou sensíveis
+IDEIAS.md

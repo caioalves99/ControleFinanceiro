@@ -1,1 +1,14 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"controlefinanceiro-c238a","appId":"1:900505056984:android:f0fa1c6a5ac4e0363589ad","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"controlefinanceiro-c238a","configurations":{"android":"1:900505056984:android:f0fa1c6a5ac4e0363589ad","ios":"1:900505056984:ios:285a904dcf24cf663589ad","macos":"1:900505056984:ios:285a904dcf24cf663589ad","web":"1:900505056984:web:173099c4439fc4523589ad","windows":"1:900505056984:web:552a1398b8dd2e1b3589ad"}}}}}}
+{
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "hosting": {
+    "public": "dist",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
+}

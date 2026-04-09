@@ -54,7 +54,7 @@ const LoginPage: React.FC = () => {
           }}>
             <LogIn size={32} color="var(--primary-color)" />
           </div>
-          <h1 style={{ margin: 0, fontSize: '2rem', color: 'var(--primary-color)' }}>FinTrack</h1>
+          <h1 style={{ margin: 0, fontSize: '2rem', color: '#ffffff', fontWeight: 900 }}>Controle Financeiro</h1>
           <p style={{ color: 'var(--text-muted)', marginTop: '0.5rem' }}>
             Gerencie suas finanças de forma simples e rápida.
           </p>

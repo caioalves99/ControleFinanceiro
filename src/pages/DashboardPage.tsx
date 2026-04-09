@@ -74,8 +74,8 @@ const DashboardPage: React.FC = () => {
     <div className="container">
       <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3rem' }}>
         <div>
-          <h1 style={{ margin: 0, fontSize: '1.75rem', background: 'var(--grad-primary)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-            FinTrack
+          <h1 style={{ margin: 0, fontSize: '1.85rem', color: '#ffffff', fontWeight: 900, textShadow: '0 0 20px rgba(99, 102, 241, 0.4)' }}>
+            Controle Financeiro
           </h1>
           <p style={{ margin: 0, color: 'var(--text-muted)', fontSize: '0.9rem' }}>Controle suas finanças com estilo</p>
         </div>
